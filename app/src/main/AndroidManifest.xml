@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest
+    package="com.haarman.pebblenotifier"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <application
+        android:name=".PebbleNotifierApplication"
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".controller.main.MainActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".controller.mutedapps.MutedAppsActivity" />
+
+        <activity android:name=".controller.about.AboutActivity" />
+
+        <activity android:name=".controller.preferences.PreferencesActivity" />
+
+        <service
+            android:name=".notifications.MyNotificationListenerService"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService" />
+            </intent-filter>
+        </service>
+        <meta-data android:name="com.crashlytics.ApiKey" android:value="f735fdad12398d96b9c10c77d771eebb830d666d"/>
+
+    </application>
+
+</manifest>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="aboutLibraries_description_showIcon">true</string>
+    <string name="aboutLibraries_description_showVersion">true</string>
+
+    <!-- ListViewAnimations -->
+    <string name="define_int_listviewanimations">listviewanimations</string>
+    <string name="library_listviewanimations_author">Niek Haarman</string>
+    <string name="library_listviewanimations_authorWebsite">http://www.nhaarman.com</string>
+    <string name="library_listviewanimations_libraryName">ListViewAnimations</string>
+    <string name="library_listviewanimations_libraryDescription">ListViewAnimations is an Open Source Android library that allows developers to easily create ListViews with animations.</string>
+    <string name="library_listviewanimations_libraryWebsite">http://nhaarman.github.io/ListViewAnimations</string>
+    <string name="library_listviewanimations_libraryVersion">3.1.0</string>
+    <string name="library_listviewanimations_isOpenSource">true</string>
+    <string name="library_listviewanimations_repositoryLink">git@github.com:nhaarman/ListViewAnimations.git</string>
+    <string name="library_listviewanimations_licenseId">apache_2_0</string>
+
+
+</resources>
