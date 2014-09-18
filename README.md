@@ -13,6 +13,20 @@ Obviously, Pebble Notifier needs access to your notifications to work. It also n
 You can contribute to this project! Have an amazing feature you'd like to add, or a fix to some bug? Just fork this project, and issue a pull request!
 Remember to review the [Contributing guidelines](https://raw.githubusercontent.com/nhaarman/PebbleNotifier/master/CONTRIBUTING.md) before you do.
 
+### Specific notification strategies
+
+Pebble Notifier is easily set up to create custom notification text strategies to extract text from the notification to send to your Pebble. For example, take a look at the
+[SpotifyNotificationStrategy](https://github.com/nhaarman/PebbleNotifier/blob/master/app/src/main/java/com/haarman/pebblenotifier/notifications
+/strategies/SpotifyNotificationStrategy.java) class. It handles its own logic specific for Spotify notifications, to get the best experience.
+
+You can create your own strategy for a specific app by:
+
+ - Creating a `AppNotificationStrategy` class in the `strategies` package, which implements `NotificationTextStrategy`;
+ - Modifying `NotificationTextStrategyFactory` to return a new instance of your class when the package matches.
+
+Created a cool new strategy? Submit a pull request!
+
+
 ## Created by
 
  - Niek Haarman
