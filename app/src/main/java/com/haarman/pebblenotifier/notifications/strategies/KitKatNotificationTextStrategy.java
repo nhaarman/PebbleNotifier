@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-package com.haarman.pebblenotifier.notifications;
+package com.haarman.pebblenotifier.notifications.strategies;
 
 import android.annotation.TargetApi;
 import android.app.Notification;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Debug;
 import android.service.notification.StatusBarNotification;
 
 import org.jetbrains.annotations.NotNull;

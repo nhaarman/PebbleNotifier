@@ -19,11 +19,12 @@ package com.haarman.pebblenotifier.notifications;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Build;
-import android.os.Debug;
 import android.os.IBinder;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 
+import com.haarman.pebblenotifier.notifications.strategies.NotificationTextStrategy;
+import com.haarman.pebblenotifier.notifications.strategies.NotificationTextStrategyFactory;
 import com.haarman.pebblenotifier.util.AppBus;
 import com.haarman.pebblenotifier.PebbleNotifierApplication;
 import com.haarman.pebblenotifier.controller.main.MainActivity;

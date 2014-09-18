@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.haarman.pebblenotifier.notifications;
+package com.haarman.pebblenotifier.notifications.strategies;
 
 import android.content.Context;
 
