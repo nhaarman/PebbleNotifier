@@ -16,9 +16,9 @@
 
 package com.haarman.pebblenotifier.notifications;
 
-import android.app.Notification;
 import android.content.Context;
 import android.service.notification.StatusBarNotification;
+import android.support.annotation.Nullable;
 
 import com.haarman.pebblenotifier.notifications.strategies.DefaultNotificationTextStrategy;
 import com.haarman.pebblenotifier.notifications.strategies.KitKatNotificationTextStrategy;
@@ -27,6 +27,9 @@ import com.haarman.pebblenotifier.notifications.strategies.SpotifyNotificationSt
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static android.os.Build.VERSION;
 import static android.os.Build.VERSION_CODES.KITKAT;
 import static android.os.Build.VERSION_CODES.KITKAT_WATCH;
@@ -34,17 +37,25 @@ import static android.os.Build.VERSION_CODES.L;
 
 public class NotificationTextStrategyFactory {
 
+    /**
+     * A Map which keeps a reference to the cached strategies.
+     * The keyset of the Map is always filled with the package names of the supported apps.
+     */
+    private static final Map<String, NotificationTextStrategy> STRATEGY_MAP = new HashMap<>();
+
+    static {
+        /* Fill the strategy map with the package names of the supported apps. */
+        STRATEGY_MAP.put(SpotifyNotificationStrategy.PACKAGE_SPOTIFY, null);
+    }
+
     private NotificationTextStrategyFactory() {
     }
 
     @NotNull
     public static NotificationTextStrategy getNotificationTextStrategy(@NotNull final Context context, @NotNull final StatusBarNotification notification) {
-        NotificationTextStrategy result;
+        NotificationTextStrategy result = getCustomStrategy(notification);
 
-        String packageName = notification.getPackageName();
-        if (packageName.equals(SpotifyNotificationStrategy.PACKAGE_SPOTIFY)) {
-            result = new SpotifyNotificationStrategy();
-        } else {
+        if (result == null) {
             switch (VERSION.SDK_INT) {
                 case L:
                 case KITKAT_WATCH:
@@ -55,6 +66,37 @@ public class NotificationTextStrategyFactory {
                     result = new DefaultNotificationTextStrategy(context);
             }
         }
+
+        return result;
+    }
+
+    @Nullable
+    private static NotificationTextStrategy getCustomStrategy(@NotNull final StatusBarNotification statusBarNotification) {
+        NotificationTextStrategy result = null;
+
+        if (STRATEGY_MAP.keySet().contains(statusBarNotification.getPackageName())) {
+            result = STRATEGY_MAP.get(statusBarNotification.getPackageName());
+            if (result == null) {
+                result = createAndCacheCustomStrategy(statusBarNotification);
+            }
+        }
+
+        return result;
+    }
+
+    @Nullable
+    private static NotificationTextStrategy createAndCacheCustomStrategy(@NotNull final StatusBarNotification statusBarNotification) {
+        NotificationTextStrategy result;
+
+        switch (statusBarNotification.getPackageName()) {
+            case SpotifyNotificationStrategy.PACKAGE_SPOTIFY:
+                result = new SpotifyNotificationStrategy();
+                break;
+            default:
+                result = null;
+        }
+
+        STRATEGY_MAP.put(statusBarNotification.getPackageName(), result);
 
         return result;
     }
