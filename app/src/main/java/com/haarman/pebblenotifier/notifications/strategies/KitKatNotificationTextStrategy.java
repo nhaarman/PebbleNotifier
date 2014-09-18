@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-package com.haarman.pebblenotifier.notifications;
+package com.haarman.pebblenotifier.notifications.strategies;
 
 import android.annotation.TargetApi;
 import android.app.Notification;
+import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.service.notification.StatusBarNotification;
@@ -27,6 +28,12 @@ import org.jetbrains.annotations.NotNull;
 @TargetApi(Build.VERSION_CODES.KITKAT)
 public class KitKatNotificationTextStrategy implements NotificationTextStrategy {
 
+    @NotNull
+    private final DefaultNotificationTextStrategy mDefaultNotificationTextStrategy;
+
+    public KitKatNotificationTextStrategy(@NotNull final Context context) {
+        mDefaultNotificationTextStrategy = new DefaultNotificationTextStrategy(context);
+    }
 
     @Override
     public String createTitle(@NotNull final StatusBarNotification statusBarNotification) {
@@ -37,8 +44,10 @@ public class KitKatNotificationTextStrategy implements NotificationTextStrategy 
 
         if (title != null) {
             return bigTitle != null ? String.valueOf(bigTitle) : String.valueOf(title);
+        } else if (bigTitle != null) {
+            return String.valueOf(bigTitle);
         } else {
-            return bigTitle != null ? String.valueOf(bigTitle) : "-";
+            return mDefaultNotificationTextStrategy.createTitle(statusBarNotification);
         }
     }
 
@@ -64,6 +73,6 @@ public class KitKatNotificationTextStrategy implements NotificationTextStrategy 
             result.append(subText).append('\n');
         }
 
-        return result.toString().isEmpty() ? "-" : result.toString();
+        return result.toString().isEmpty() ? mDefaultNotificationTextStrategy.createText(statusBarNotification) : result.toString();
     }
 }
