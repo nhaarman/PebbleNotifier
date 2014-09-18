@@ -36,22 +36,25 @@ public class DefaultNotificationTextStrategy implements NotificationTextStrategy
     @NotNull
     private final Context mContext;
 
+    @NotNull private final NotificationTextStrategy mNotificationTextStrategy;
+
     public DefaultNotificationTextStrategy(@NotNull final Context context) {
         mContext = context;
+        mNotificationTextStrategy = new ViewInspectorNotificationStrategy();
     }
 
     @Override
     public String createTitle(@NotNull final StatusBarNotification statusBarNotification) {
-        String result = "";
+        String result;
 
         Bundle extras = getExtras(statusBarNotification);
         if (extras == null) {
             result = getAppName(statusBarNotification);
         } else {
-            getExtrasTitle(extras);
+            result = getExtrasTitle(extras);
         }
 
-        return result;
+        return result == null ? mNotificationTextStrategy.createTitle(statusBarNotification) : result;
     }
 
     private String getAppName(@NotNull final StatusBarNotification statusBarNotification) {
@@ -62,7 +65,7 @@ public class DefaultNotificationTextStrategy implements NotificationTextStrategy
             ApplicationInfo ai = pm.getApplicationInfo(statusBarNotification.getPackageName(), 0);
             result = ai != null ? (String) pm.getApplicationLabel(ai) : "";
         } catch (final PackageManager.NameNotFoundException ignored) {
-                /* Unfortunately, we cannot show anything. */
+            /* Unfortunately, we cannot show anything. */
         }
         return result;
     }
@@ -107,7 +110,7 @@ public class DefaultNotificationTextStrategy implements NotificationTextStrategy
             result.append(subText).append('\n');
         }
 
-        return result.toString().isEmpty() ? "-" : result.toString();
+        return result.toString().isEmpty() ? mNotificationTextStrategy.createText(statusBarNotification) : result.toString();
     }
 
     @Nullable

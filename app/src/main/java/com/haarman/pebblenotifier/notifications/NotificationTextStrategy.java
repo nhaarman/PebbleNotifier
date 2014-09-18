@@ -19,11 +19,14 @@ package com.haarman.pebblenotifier.notifications;
 import android.service.notification.StatusBarNotification;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public interface NotificationTextStrategy {
 
+    @Nullable
     String createTitle(@NotNull StatusBarNotification statusBarNotification);
 
+    @Nullable
     String createText(@NotNull StatusBarNotification statusBarNotification);
 
 }

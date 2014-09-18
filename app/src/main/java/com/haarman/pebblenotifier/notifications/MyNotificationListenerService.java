@@ -103,8 +103,10 @@ public class MyNotificationListenerService extends NotificationListenerService {
 
         Notification notification = ((PebbleNotifierApplication) getApplication()).getGraph().get(Notification.class);
         notification.setApp(app);
-        notification.setTitle(mNotificationTextStrategy.createTitle(statusBarNotification));
-        notification.setText(mNotificationTextStrategy.createText(statusBarNotification));
+        String title = mNotificationTextStrategy.createTitle(statusBarNotification);
+        notification.setTitle(title == null ? "-" : title);
+        String text = mNotificationTextStrategy.createText(statusBarNotification);
+        notification.setText(text == null ? "-" : text);
         notification.create();
 
         mAppBus.postNewNotificationEvent(notification);
