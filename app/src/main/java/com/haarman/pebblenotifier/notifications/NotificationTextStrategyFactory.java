@@ -35,7 +35,7 @@ public class NotificationTextStrategyFactory {
             case L:
             case KITKAT_WATCH:
             case KITKAT:
-                return new KitKatNotificationTextStrategy();
+                return new KitKatNotificationTextStrategy(context);
             default:
                 return new DefaultNotificationTextStrategy(context);
         }
