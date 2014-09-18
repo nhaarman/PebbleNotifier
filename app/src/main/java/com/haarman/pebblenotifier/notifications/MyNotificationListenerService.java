@@ -19,12 +19,12 @@ package com.haarman.pebblenotifier.notifications;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Build;
+import android.os.Debug;
 import android.os.IBinder;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 
 import com.haarman.pebblenotifier.notifications.strategies.NotificationTextStrategy;
-import com.haarman.pebblenotifier.notifications.strategies.NotificationTextStrategyFactory;
 import com.haarman.pebblenotifier.util.AppBus;
 import com.haarman.pebblenotifier.PebbleNotifierApplication;
 import com.haarman.pebblenotifier.controller.main.MainActivity;
@@ -52,12 +52,9 @@ public class MyNotificationListenerService extends NotificationListenerService {
     @NotNull
     protected AppBus mAppBus;
 
-    private NotificationTextStrategy mNotificationTextStrategy;
-
     @Override
     public IBinder onBind(final Intent intent) {
         Injector.from(this).inject(this);
-        mNotificationTextStrategy = NotificationTextStrategyFactory.getNotificationTextStrategy(this);
 
         mPreferences.setHasNotificationAccess(true);
         if (mPreferences.isGivingNotificationAccess()) {
@@ -102,11 +99,13 @@ public class MyNotificationListenerService extends NotificationListenerService {
             Injector.from(this).inject(app);
         }
 
+        NotificationTextStrategy notificationTextStrategy = NotificationTextStrategyFactory.getNotificationTextStrategy(this, statusBarNotification);
+
         Notification notification = ((PebbleNotifierApplication) getApplication()).getGraph().get(Notification.class);
         notification.setApp(app);
-        String title = mNotificationTextStrategy.createTitle(statusBarNotification);
+        String title = notificationTextStrategy.createTitle(statusBarNotification);
         notification.setTitle(title == null ? "-" : title);
-        String text = mNotificationTextStrategy.createText(statusBarNotification);
+        String text = notificationTextStrategy.createText(statusBarNotification);
         notification.setText(text == null ? "-" : text);
         notification.create();
 

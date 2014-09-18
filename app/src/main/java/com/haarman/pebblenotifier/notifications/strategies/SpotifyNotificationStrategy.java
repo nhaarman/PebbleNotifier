@@ -21,39 +21,41 @@ import android.service.notification.StatusBarNotification;
 import com.haarman.pebblenotifier.util.NotificationUtils;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 /**
- * A NotificationTextStrategy which uses reflection to find text in the notification.
+ * A NotificationTextStrategy for Spotify notifications.
+ *
+ * This class specifically relies on the following notification structure:
+ *  - {title}
+ *  - {album}
+ *  - {artist}
  */
-public class ViewInspectorNotificationStrategy implements NotificationTextStrategy {
+public class SpotifyNotificationStrategy implements NotificationTextStrategy {
 
+    public static final String PACKAGE_SPOTIFY = "com.spotify.music";
+
+    @Nullable
     @Override
     public String createTitle(@NotNull final StatusBarNotification statusBarNotification) {
         List<String> strings = NotificationUtils.getStrings(statusBarNotification.getNotification());
-        if (strings.isEmpty()) {
-            return null;
+        if (strings.size() == 3) {
+            return strings.get(2) + " - " + strings.get(0);
         } else {
-            return strings.get(0);
+            return null;
         }
     }
 
+    @Nullable
     @Override
     public String createText(@NotNull final StatusBarNotification statusBarNotification) {
         List<String> strings = NotificationUtils.getStrings(statusBarNotification.getNotification());
-        if (strings.size() <= 1) {
+        if (strings.size() == 3) {
+            return strings.get(1);
+        } else {
             return null;
         }
-
-        StringBuilder stringBuilder = new StringBuilder(255);
-
-        for (int i = 1; i < strings.size(); i++) {
-            stringBuilder.append(strings.get(i)).append('\n');
-        }
-
-        return stringBuilder.toString();
     }
-
-
 }
