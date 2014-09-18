@@ -20,6 +20,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.haarman.pebblenotifier.model.App;
+import com.haarman.pebblenotifier.model.Notification;
 import com.haarman.pebblenotifier.model.OrmManager;
 import com.haarman.pebblenotifier.util.ForApplication;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
@@ -30,6 +31,7 @@ import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
 import java.sql.SQLException;
@@ -162,6 +164,19 @@ public class OrmLiteDatabaseHelper extends OrmLiteSqliteOpenHelper implements Or
             queryBuilder.where().eq(OrmLiteApp.COLUMN_MUTED, true);
             queryBuilder.orderBy(OrmLiteApp.COLUMN_NAME, true);
             return queryBuilder.query();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Nullable
+    @Override
+    public Notification getLastNotification() {
+        RuntimeExceptionDao<OrmLiteNotification, ?> dao = getRuntimeExceptionDao(OrmLiteNotification.class);
+        QueryBuilder<OrmLiteNotification, ?> queryBuilder = dao.queryBuilder();
+        queryBuilder.orderBy(OrmLiteModel.COLUMN_CREATED, false);
+        try {
+            return queryBuilder.queryForFirst();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

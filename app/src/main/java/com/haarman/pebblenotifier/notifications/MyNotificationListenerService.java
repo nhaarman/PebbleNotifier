@@ -35,6 +35,8 @@ import com.haarman.pebblenotifier.util.Injector;
 import com.haarman.pebblenotifier.util.Preferences;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.joda.time.Seconds;
 
 import javax.inject.Inject;
 
@@ -99,17 +101,43 @@ public class MyNotificationListenerService extends NotificationListenerService {
             Injector.from(this).inject(app);
         }
 
+        Notification notification = createNotification(app, statusBarNotification);
+        if (notification != null && !shouldIgnoreNotification(notification)) {
+            notification.create();
+            mAppBus.postNewNotificationEvent(notification);
+        }
+    }
+
+    @Nullable
+    private Notification createNotification(@NotNull final App app, @NotNull final StatusBarNotification statusBarNotification) {
         NotificationTextStrategy notificationTextStrategy = NotificationTextStrategyFactory.getNotificationTextStrategy(this, statusBarNotification);
-
-        Notification notification = ((PebbleNotifierApplication) getApplication()).getGraph().get(Notification.class);
-        notification.setApp(app);
         String title = notificationTextStrategy.createTitle(statusBarNotification);
-        notification.setTitle(title == null ? "-" : title);
         String text = notificationTextStrategy.createText(statusBarNotification);
-        notification.setText(text == null ? "-" : text);
-        notification.create();
 
-        mAppBus.postNewNotificationEvent(notification);
+        Notification result = null;
+
+        if (title != null && text != null) {
+            result = ((PebbleNotifierApplication) getApplication()).getGraph().get(Notification.class);
+            result.setApp(app);
+            result.setTitle(title);
+            result.setText(text);
+        }
+
+        return result;
+    }
+
+    private boolean shouldIgnoreNotification(@NotNull final Notification notification) {
+        Notification lastNotification = mOrmManager.getLastNotification();
+        if (lastNotification == null) {
+            return false;
+        }
+
+        boolean result = !notification.getTitle().equals(lastNotification.getTitle());
+        result |= !notification.getText().equals(lastNotification.getText());
+
+        result &= Seconds.secondsBetween(lastNotification.getCreated(), notification.getCreated()).getSeconds() < 60;
+
+        return result;
     }
 
 }

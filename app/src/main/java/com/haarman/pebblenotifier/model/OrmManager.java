@@ -16,6 +16,8 @@
 
 package com.haarman.pebblenotifier.model;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.List;
 
 public interface OrmManager {
@@ -33,4 +35,7 @@ public interface OrmManager {
     <T> List<T> all(Class<T> clzz);
 
     List<App> getMutedApps();
+
+    @Nullable
+    Notification getLastNotification();
 }
