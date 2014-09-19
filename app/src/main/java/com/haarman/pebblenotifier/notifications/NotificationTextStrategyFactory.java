@@ -24,6 +24,7 @@ import com.haarman.pebblenotifier.notifications.strategies.DefaultNotificationTe
 import com.haarman.pebblenotifier.notifications.strategies.KitKatNotificationTextStrategy;
 import com.haarman.pebblenotifier.notifications.strategies.NotificationTextStrategy;
 import com.haarman.pebblenotifier.notifications.strategies.SpotifyNotificationStrategy;
+import com.haarman.pebblenotifier.notifications.strategies.ThreemaNotificationStrategy;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -46,6 +47,7 @@ public class NotificationTextStrategyFactory {
     static {
         /* Fill the strategy map with the package names of the supported apps. */
         STRATEGY_MAP.put(SpotifyNotificationStrategy.PACKAGE_SPOTIFY, null);
+        STRATEGY_MAP.put(ThreemaNotificationStrategy.PACKAGE_THREEMA, null);
     }
 
     private NotificationTextStrategyFactory() {
@@ -91,6 +93,9 @@ public class NotificationTextStrategyFactory {
         switch (statusBarNotification.getPackageName()) {
             case SpotifyNotificationStrategy.PACKAGE_SPOTIFY:
                 result = new SpotifyNotificationStrategy();
+                break;
+            case ThreemaNotificationStrategy.PACKAGE_THREEMA:
+                result = new ThreemaNotificationStrategy();
                 break;
             default:
                 result = null;
