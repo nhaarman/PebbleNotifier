@@ -252,7 +252,9 @@ public class MainView extends RelativeLayout {
         @Override
         public void onDismiss(@NonNull final ViewGroup listView, @NonNull final int[] reverseSortedPositions) {
             for (int position : reverseSortedPositions) {
-                mAppBus.postNotificationRemovedEvent(mAdapter.getItem(position));
+                if (mAdapter.getCount() > position) {
+                    mAppBus.postNotificationRemovedEvent(mAdapter.getItem(position));
+                }
             }
             mAdapter.notifyDataSetChanged();
 
