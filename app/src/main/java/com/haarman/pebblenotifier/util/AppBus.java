@@ -22,7 +22,6 @@ import android.os.Looper;
 import com.haarman.pebblenotifier.events.NewNotificationEvent;
 import com.haarman.pebblenotifier.events.NotificationRemovedEvent;
 import com.haarman.pebblenotifier.events.RetrievedAppListEvent;
-import com.haarman.pebblenotifier.events.RetrievedListEvent;
 import com.haarman.pebblenotifier.events.RetrievedNotificationListEvent;
 import com.haarman.pebblenotifier.events.SendNotificationEvent;
 import com.haarman.pebblenotifier.events.ToggleMuteAppEvent;
@@ -63,6 +62,10 @@ public class AppBus extends Bus {
         post(new NewNotificationEvent(notification));
     }
 
+    public void postNotificationRemovedEvent(final Notification notification) {
+        post(new NotificationRemovedEvent(notification));
+    }
+
     @Override
     public void post(final Object event) {
         if (Looper.myLooper() == Looper.getMainLooper()) {
@@ -77,9 +80,5 @@ public class AppBus extends Bus {
                     }
             );
         }
-    }
-
-    public void postNotificationRemovedEvent(final Notification notification) {
-        post(new NotificationRemovedEvent(notification));
     }
 }

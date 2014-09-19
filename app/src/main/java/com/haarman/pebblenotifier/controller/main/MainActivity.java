@@ -25,6 +25,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.crashlytics.android.Crashlytics;
 import com.haarman.pebblenotifier.PebbleNotifierActivity;
 import com.haarman.pebblenotifier.R;
 import com.haarman.pebblenotifier.controller.about.AboutActivity;
@@ -148,6 +149,8 @@ public class MainActivity extends PebbleNotifierActivity {
      */
     @Subscribe
     public void onMuteNotificationClicked(@NotNull final ToggleMuteNotificationEvent event) {
+        Crashlytics.log("MainActivity.onMuteNotificationClicked");
+
         App app = event.getNotification().getApp();
         inject(app);
 
@@ -165,6 +168,8 @@ public class MainActivity extends PebbleNotifierActivity {
      */
     @Subscribe
     public void onSendNotificationClicked(@Nullable final SendNotificationEvent event) {
+        Crashlytics.log("MainActivity.onSendNotificationClicked");
+
         android.app.Notification notification = new android.app.Notification.Builder(this)
                 .setSmallIcon(R.drawable.ic_notification)
                 .setContentTitle(getString(R.string.app_name))
@@ -184,6 +189,8 @@ public class MainActivity extends PebbleNotifierActivity {
      */
     @Subscribe
     public void onNotificationRemovedEvent(@NotNull final NotificationRemovedEvent event) {
+        Crashlytics.log("MainActivity.onNotificationRemovedEvent");
+
         Notification notification = event.getNotification();
         mNotificationList.remove(notification);
 

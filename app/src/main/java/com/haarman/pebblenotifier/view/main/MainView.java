@@ -25,6 +25,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
+import com.crashlytics.android.Crashlytics;
 import com.haarman.pebblenotifier.R;
 import com.haarman.pebblenotifier.events.NewNotificationEvent;
 import com.haarman.pebblenotifier.events.RetrievedNotificationListEvent;
@@ -38,6 +39,8 @@ import com.squareup.otto.Subscribe;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Arrays;
 
 import javax.inject.Inject;
 
@@ -157,6 +160,8 @@ public class MainView extends RelativeLayout {
      */
     @Subscribe
     public void setNotificationList(@NotNull final RetrievedNotificationListEvent event) {
+        Crashlytics.log("MainView.setNotificationList");
+
         mAdapter.setNotificationList(event.getList());
         mAdapter.notifyDataSetChanged();
 
@@ -172,6 +177,8 @@ public class MainView extends RelativeLayout {
     @Optional
     @OnClick(R.id.view_main_sendnotificationbutton)
     public void onSendNotificationClicked() {
+        Crashlytics.log("MainView.onSendNotificationClicked");
+
         mAppBus.postSendNotificationEvent();
     }
 
@@ -185,6 +192,8 @@ public class MainView extends RelativeLayout {
      */
     @Subscribe
     public void onNewNotification(@NotNull final NewNotificationEvent event) {
+        Crashlytics.log("MainView.onNewNotification");
+
         if (mAdapter.getCount() == 0) {
             mNoNotificationsView.setVisibility(GONE);
             mSendNotificationButton.setVisibility(GONE);
@@ -251,11 +260,13 @@ public class MainView extends RelativeLayout {
          */
         @Override
         public void onDismiss(@NonNull final ViewGroup listView, @NonNull final int[] reverseSortedPositions) {
+            Crashlytics.log("Dismissing: " + Arrays.toString(reverseSortedPositions) + " for an adapter with " + mAdapter.getCount() + " items");
             for (int position : reverseSortedPositions) {
                 if (mAdapter.getCount() > position) {
                     mAppBus.postNotificationRemovedEvent(mAdapter.getItem(position));
                 }
             }
+            Crashlytics.log("Notifying adapter of dismissed data");
             mAdapter.notifyDataSetChanged();
 
             if (mAdapter.getCount() == 0) {

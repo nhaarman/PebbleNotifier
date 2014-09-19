@@ -18,6 +18,7 @@ package com.haarman.pebblenotifier.controller.mutedapps;
 
 import android.os.Bundle;
 
+import com.crashlytics.android.Crashlytics;
 import com.haarman.pebblenotifier.PebbleNotifierActivity;
 import com.haarman.pebblenotifier.R;
 import com.haarman.pebblenotifier.events.ToggleMuteAppEvent;
@@ -40,9 +41,6 @@ public class MutedAppsActivity extends PebbleNotifierActivity {
     @NotNull
     @Inject
     protected AppBus mBus;
-
-    @InjectView(R.id.activity_mutedapps_mutedappsview)
-    protected MutedAppsView mMutedAppsPresenter;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -67,6 +65,8 @@ public class MutedAppsActivity extends PebbleNotifierActivity {
 
     @Subscribe
     public void onToggleMuteAppClicked(@NotNull final ToggleMuteAppEvent event) {
+        Crashlytics.log("MutedAppsActivity.onToggleMuteAppClicked");
+
         App app = event.getApp();
 
         app.setMuted(!app.isMuted());

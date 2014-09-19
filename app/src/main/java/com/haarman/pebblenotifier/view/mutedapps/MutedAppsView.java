@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
+import com.crashlytics.android.Crashlytics;
 import com.haarman.pebblenotifier.events.RetrievedAppListEvent;
 import com.haarman.pebblenotifier.util.AppBus;
 import com.haarman.pebblenotifier.R;
@@ -68,6 +69,8 @@ public class MutedAppsView extends RelativeLayout {
 
     @Subscribe
     public void setAppList(@NotNull final RetrievedAppListEvent event) {
+        Crashlytics.log("MutedAppsView.setAppList");
+
         MutedAppAdapter adapter = new MutedAppAdapter(getContext(), event.getList());
         AlphaInAnimationAdapter animationAdapter = new AlphaInAnimationAdapter(adapter);
         animationAdapter.setAbsListView(mListView);

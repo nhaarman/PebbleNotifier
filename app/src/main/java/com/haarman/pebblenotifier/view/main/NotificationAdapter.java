@@ -98,10 +98,6 @@ public class NotificationAdapter extends BaseAdapter implements Insertable<Notif
         return (NotificationView) inflater.inflate(R.layout.view_notification, parent, false);
     }
 
-    public void remove(final int position) {
-        mNotificationList.remove(position);
-    }
-
     private class OnMuteButtonClickListener implements View.OnClickListener {
 
         private final int mPosition;
