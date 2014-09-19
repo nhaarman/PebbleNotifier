@@ -52,7 +52,7 @@ public class QueryAllNotificationsTask extends AsyncTask<List<Notification>> {
 
     public QueryAllNotificationsTask(@NotNull final Context context) {
         Injector.from(context).inject(this);
-        mContext = context;
+        mContext = context.getApplicationContext();
     }
 
     public void setComparator(@Nullable final Comparator<Notification> comparator) {

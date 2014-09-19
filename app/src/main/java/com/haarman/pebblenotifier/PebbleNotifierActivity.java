@@ -21,6 +21,8 @@ import android.os.Bundle;
 
 import com.haarman.pebblenotifier.util.Injectable;
 
+import org.jetbrains.annotations.Nullable;
+
 import dagger.ObjectGraph;
 
 /**
@@ -32,6 +34,7 @@ public class PebbleNotifierActivity extends Activity implements Injectable {
     /**
      * The extended ObjectGraph.
      */
+    @Nullable
     private ObjectGraph mObjectGraph;
 
     @Override
@@ -49,7 +52,11 @@ public class PebbleNotifierActivity extends Activity implements Injectable {
 
     @Override
     public <T> T inject(final T object) {
-        return mObjectGraph.inject(object);
+        if (mObjectGraph == null) {
+            throw new NullPointerException("Requested injection on an invalid Context! Are you leaking the Context?");
+        } else {
+            return mObjectGraph.inject(object);
+        }
     }
 
 }
