@@ -16,15 +16,10 @@
 
 package com.haarman.pebblenotifier;
 
-import com.haarman.pebblenotifier.model.ormlite.DebugOrmLiteModule;
-
 import dagger.Module;
 
 @Module(
         addsTo = ApplicationModule.class,
-        includes = {
-                DebugOrmLiteModule.class
-        },
         overrides = true,
         complete = false
 )
