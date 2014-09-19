@@ -19,18 +19,17 @@ package com.haarman.pebblenotifier.notifications;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Build;
-import android.os.Debug;
 import android.os.IBinder;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 
-import com.haarman.pebblenotifier.notifications.strategies.NotificationTextStrategy;
-import com.haarman.pebblenotifier.util.AppBus;
 import com.haarman.pebblenotifier.PebbleNotifierApplication;
 import com.haarman.pebblenotifier.controller.main.MainActivity;
 import com.haarman.pebblenotifier.model.App;
 import com.haarman.pebblenotifier.model.Notification;
 import com.haarman.pebblenotifier.model.OrmManager;
+import com.haarman.pebblenotifier.notifications.strategies.NotificationTextStrategy;
+import com.haarman.pebblenotifier.util.AppBus;
 import com.haarman.pebblenotifier.util.Injector;
 import com.haarman.pebblenotifier.util.Preferences;
 
@@ -132,10 +131,14 @@ public class MyNotificationListenerService extends NotificationListenerService {
             return false;
         }
 
-        boolean result = !notification.getTitle().equals(lastNotification.getTitle());
-        result |= !notification.getText().equals(lastNotification.getText());
-
-        result &= Seconds.secondsBetween(lastNotification.getCreated(), notification.getCreated()).getSeconds() < 60;
+        boolean result = false;
+        if (notification.getTitle().equals(lastNotification.getTitle())) {
+            if (notification.getText().equals(lastNotification.getText())) {
+                if (Seconds.secondsBetween(lastNotification.getCreated(), notification.getCreated()).getSeconds() < 60) {
+                    result = true;
+                }
+            }
+        }
 
         return result;
     }
